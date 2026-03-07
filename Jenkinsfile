@@ -31,9 +31,8 @@ pipeline {
 		stage('Terraform Init') {
 			steps {
 				echo 'Initializing Terraform'
-				sh 'export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin'
 				dir('terraform') {
-					sh 'terraform init'
+					sh 'export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin && terraform init'
 				}
 			}
 		}
@@ -41,9 +40,9 @@ pipeline {
 		stage('Terraform Validate') {
 			steps {
 				echo 'Validating Terraform configuration'
-				sh 'export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin'
+
 				dir('terraform') {
-					sh 'terraform validate'
+					sh 'export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin && terraform validate'
 				}
 			}
 		}
@@ -51,9 +50,9 @@ pipeline {
 		stage('Terraform Plan') {
 			steps {
 				echo 'Planning Terraform deployment'
-				sh 'export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin'
+
 				dir('terraform') {
-					sh 'terraform plan -out=tfplan'
+					sh 'export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin && terraform plan -out=tfplan'
 				}
 			}
 		}
@@ -61,9 +60,9 @@ pipeline {
 		stage('Terraform Apply') {
 			steps {
 				echo 'Applying Terraform deployment'
-				sh 'export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin'
+
 				dir('terraform') {
-					sh 'terraform apply -auto-approve tfplan'
+					sh 'export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin && terraform apply -auto-approve tfplan'
 				}
 			}
 		}
