@@ -108,7 +108,7 @@ pipeline {
 				echo 'Creating ArgoCD application for part-inventory-service'
 				sh '''
 				export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin
-				kubectl apply -f ${GITOPS_REPO_URL}/argocd/application.yaml
+				kubectl apply -f ${GITOPS_REPO_URL}/https://github.com/ramanujds/blob/main/argocd/application.yaml
 				'''
 			}
 
