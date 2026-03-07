@@ -9,6 +9,7 @@ pipeline {
 	environment {
 		RESOURCE_GROUP = "forvia-aks"
 		CLUSTER_NAME = "forvia-cluster"
+		GITOPS_REPO_URL = "https://github.com/ramanujds/gitops-repo-forvia"
 	}
 
 	stages {
@@ -83,8 +84,9 @@ pipeline {
 				echo 'Installing ArgoCD on AKS cluster'
 				sh '''
 				export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin
-				kubectl create namespace argocd || true
-				kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml || true
+				helm repo add argo https://argoproj.github.io/argo-helm
+				helm repo update
+				helm upgrade --install argocd argo/argo-cd --namespace argocd --create-namespace
 				'''
 
 			}
@@ -96,6 +98,17 @@ pipeline {
 				sh '''
 				export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin
 				kubectl get pods -n argocd
+				'''
+			}
+
+		}
+
+		stage('Create ArgoCD Application') {
+			steps {
+				echo 'Creating ArgoCD application for part-inventory-service'
+				sh '''
+				export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin
+				kubectl apply -f ${GITOPS_REPO_URL}/argocd/application.yaml
 				'''
 			}
 
