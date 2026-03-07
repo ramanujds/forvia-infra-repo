@@ -2,6 +2,10 @@ pipeline {
 
 	agent any
 
+	tools {
+		terraform 'terraform'
+	}
+
 	environment {
 		RESOURCE_GROUP = "forvia-aks"
 		CLUSTER_NAME = "forvia-cluster"
