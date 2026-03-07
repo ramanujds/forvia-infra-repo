@@ -83,9 +83,8 @@ pipeline {
 				echo 'Installing ArgoCD on AKS cluster'
 				sh '''
 				export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin
-				kubectl create namespace argocd
-				kubectl apply -n argocd \
-				-f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+				kubectl create namespace argocd || true
+				kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml || true
 				'''
 
 			}
