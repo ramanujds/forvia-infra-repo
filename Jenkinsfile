@@ -105,16 +105,17 @@ pipeline {
 
 		stage('Create ArgoCD Application') {
 			steps {
-				echo 'Creating ArgoCD application for part-inventory-service'
+				echo 'Creating ArgoCD root applications (app-of-apps) for dev and prod'
 				sh '''
 				export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin
-				git clone ${GITOPS_REPO_URL} gitops-repo || true
+				rm -rf gitops-repo
+				git clone ${GITOPS_REPO_URL} gitops-repo
 				'''
 				dir('gitops-repo') {
 					sh '''
 					export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin
-					git pull origin main
-					kubectl apply -f argocd/application.yaml
+					kubectl apply -f root-app-dev.yaml
+					kubectl apply -f root-app-prod.yaml
 					'''
 				}
 			}
